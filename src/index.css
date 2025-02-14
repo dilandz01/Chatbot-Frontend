@@ -27,6 +27,7 @@
   position: fixed;
   bottom: 12px;
   right: 12px;
+  z-index: 9999;
 }
 
 /* Chatbot Header */
@@ -154,15 +155,15 @@
   cursor: pointer;
 }
 
-.markdown-content a {
-  color: #1e40af; /* Equivalent to Tailwind's text-blue-800 */
-  text-decoration: underline; /* Underline the links */
-  word-break: break-word; /* Equivalent to Tailwind's break-words */
+.markdown-content {
+  color: #1e40af; 
+  text-decoration: underline; 
+  word-break: break-word; 
   transition: color 0.3s ease;
 }
 
-.markdown-content a:hover {
-  color: #2563eb; 
+.markdown-content:hover {
+  color: #063186; 
 }
 
 .send-icon {
