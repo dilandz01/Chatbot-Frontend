@@ -10,10 +10,10 @@ class ChatbotWidgetElement extends HTMLElement {
       this.attachShadow({ mode: "open" }); // Use Shadow DOM for style encapsulation
     }
 
-    // Create a <style> element to add Tailwind CSS inside Shadow DOM
+    // Create a <style> element to add CSS inside Shadow DOM
     const style = document.createElement("style");
     style.textContent = `
-      @import url("https://ow-ai-chatbot.netlify.app/ow-chatbot.css"); // Load Tailwind styles manually
+      @import url("https://ow-ai-chatbot.netlify.app/ow-chatbot.css"); // frontend deployed link for css file
     `;
 
     // Check if already rendered

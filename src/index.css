@@ -166,6 +166,16 @@
   color: #063186; 
 }
 
+.markdown-content p {
+  margin: 0;
+  padding: 0;
+  line-height: 1.5; /* Adjust line spacing */
+}
+
+.markdown-content pre {
+  white-space: pre-wrap;
+}
+
 .send-icon {
     width: 20px; 
     height: 20px; 

@@ -16,7 +16,8 @@ export default function useGenerateMessage(
   const cleanRespone = (response) => {
     return response
       .replace(/【\d+:\d+†source】/g, "") // Remove source references
-      .replace(/\n\s+/g, "\n")
+      .replace(/\n\s+/g, "\n") // Remove leading spaces from new lines
+      .replace(/\n{2,}/g, "\n") // Reduce multiple newlines to a single one
       .trim();
   };
 
@@ -36,7 +37,7 @@ export default function useGenerateMessage(
         {
           message: input,
           threadID: threadId,
-          domain: currentDomain
+          domain: currentDomain,
         }
       );
 

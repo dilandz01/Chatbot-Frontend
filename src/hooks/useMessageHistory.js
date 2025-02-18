@@ -6,6 +6,13 @@ export default function useMessageHistory(setShowPredefinedQuestions) {
       const savedMessages = localStorage.getItem("chat_messages");
       const parsedMessages = savedMessages ? JSON.parse(savedMessages) : null;
 
+       // If messages exist but expired, clear them
+       if (parsedMessages.expiry && parsedMessages.expiry <= now) {
+        console.log("Messages expired, clearing...");
+        localStorage.removeItem("chat_messages");
+        return [{ sender: "bot", text: "Hello! How can I help?" }];
+      }
+
       // Check if the data has the correct structure
       return parsedMessages && parsedMessages.messages
         ? parsedMessages.messages
@@ -30,7 +37,14 @@ export default function useMessageHistory(setShowPredefinedQuestions) {
 
   useEffect(() => {
     if (messages.length > 0) {
-      const expiryTime = Date.now() + 60 * 60 * 1000; // Expire in 60 minutes
+      if (messages.length === 1 && messages[0].sender === "bot") {
+        // If only default bot message exists, show predefined questions
+        setShowPredefinedQuestions(true);
+      } else {
+        setShowPredefinedQuestions(false);
+      }
+
+      const expiryTime = Date.now() + 30 * 60 * 1000; // Expire in 30 minutes
       localStorage.setItem(
         "chat_messages",
         JSON.stringify({ messages, expiry: expiryTime })
@@ -40,49 +54,31 @@ export default function useMessageHistory(setShowPredefinedQuestions) {
 
   useEffect(() => {
     if (threadId) {
-      const expiryTime = Date.now() + 60 * 60 * 1000; // Expire in 60 minutes
+      const expiryTime = Date.now() + 30 * 60 * 1000; // Expire in 30 minutes
       localStorage.setItem(
         "threadIdData",
         JSON.stringify({ id: threadId, expiry: expiryTime })
       );
-
-      //Set a timeout to clear both threadId and messages when they expire
-      const timeout = setTimeout(() => {
-        console.log("data is cleaned");
-        localStorage.removeItem("threadIdData");
-        localStorage.removeItem("chat_messages");
-        setThreadId(null);
-        setMessages([{ sender: "bot", text: "Hello! How can I help?" }]);
-        setShowPredefinedQuestions(true);
-      }, expiryTime - Date.now());
-
-      return () => clearTimeout(timeout); // Cleanup on change
     }
   }, [threadId]);
 
   // Check and clean expired data on mount
   useEffect(() => {
-    const checkAndClearStorage = () => {
-      const storedThread = JSON.parse(localStorage.getItem("threadIdData"));
-      const storedMessages = JSON.parse(localStorage.getItem("chat_messages"));
+    const storedThread = JSON.parse(localStorage.getItem("threadIdData"));
+    const storedMessages = JSON.parse(localStorage.getItem("chat_messages"));
 
-      const now = Date.now();
+    const now = Date.now();
 
-      if (storedThread && storedThread.expiry <= now) {
-        localStorage.removeItem("threadIdData");
-        setThreadId(null);
-      }
+    if (storedThread && storedThread.expiry <= now) {
+      localStorage.removeItem("threadIdData");
+      setThreadId(null);
+    }
 
-      if (storedMessages && storedMessages.expiry <= now) {
-        localStorage.removeItem("chat_messages");
-        setMessages([]);
-      }
-    };
-
-    checkAndClearStorage(); // Run once immediately
-    const interval = setInterval(checkAndClearStorage, 5000); // Run every 5s
-
-    return () => clearInterval(interval);
+    if (storedMessages && storedMessages.expiry <= now) {
+      localStorage.removeItem("chat_messages");
+      setMessages([{ sender: "bot", text: "Hello! How can I help?" }]);
+      setShowPredefinedQuestions(true);
+    }
   }, []);
 
   return { threadId, setThreadId, messages, setMessages };

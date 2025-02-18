@@ -1,6 +1,5 @@
 import { useRef, useState, useEffect } from "react";
 import { Loader, MessageCircle, X, SendHorizontal } from "lucide-react";
-import Logo from "/ow-logo.jpg";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm"; // Enables links & tables
 import rehypeRaw from "rehype-raw"; // Allows raw HTML
@@ -55,6 +54,7 @@ export default function ChatbotWidget() {
   const handleQuestionClick = (question) => {
     setInput(question);
     setShowPredefinedQuestions(false); // Hide quick questions after selection
+    sendMessage(question);
   };
 
   
@@ -70,7 +70,8 @@ export default function ChatbotWidget() {
         {/* Chatbot Header */}
         <div className="chatbot-header">
           <div className="chatbot-header-content">
-            <img src={Logo} alt="Assistant Logo" />
+            {/* Magento link for the image */}
+            <img src="media/wysiwyg/homepage/Chatbot_OW_Logo.jpg" alt="Assistant Logo" />
             <span className="chatbot-title">Oscar Wylee AI Assistant</span>
           </div>
           <button onClick={toggleChat}>
