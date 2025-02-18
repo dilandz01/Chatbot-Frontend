@@ -13,8 +13,8 @@ class ChatbotWidgetElement extends HTMLElement {
     // Create a <style> element to add CSS inside Shadow DOM
     const style = document.createElement("style");
     style.textContent = `
-      @import url("https://ow-ai-chatbot.netlify.app/ow-chatbot.css"); // frontend deployed link for css file
-    `;
+      @import url("https://ow-ai-chatbot.netlify.app/ow-chatbot.css"); 
+    `;// frontend deployed link for css file
 
     // Check if already rendered
     if (!this.shadowRoot.innerHTML) {
