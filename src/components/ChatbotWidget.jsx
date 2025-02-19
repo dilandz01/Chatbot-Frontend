@@ -1,11 +1,10 @@
 import { useRef, useState, useEffect } from "react";
-import { Loader, MessageSquareMore , X, MoveUp } from "lucide-react";
+import { Loader, MessageSquareMore, X, MoveUp } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm"; // Enables links & tables
 import rehypeRaw from "rehype-raw"; // Allows raw HTML
 import useMessageHistory from "../hooks/useMessageHistory";
 import useGenerateMessage from "../hooks/useGenerateMessage";
-
 
 export default function ChatbotWidget() {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,11 +34,15 @@ export default function ChatbotWidget() {
     "What frames suit oval face shape?",
   ];
 
-  // Scroll to bottom when messages are updated
+  // Scroll to top of the last messages when updated
   useEffect(() => {
     if (scrollableContainerRef.current) {
-      scrollableContainerRef.current.scrollTop =
-        scrollableContainerRef.current.scrollHeight;
+      const container = scrollableContainerRef.current;
+      const lastMessage = container.lastElementChild; // Get the last message
+
+      if (lastMessage) {
+        container.scrollTop = lastMessage.offsetTop; // Scroll to the top of the last message
+      }
     }
   }, [messages]);
 
@@ -78,7 +81,10 @@ export default function ChatbotWidget() {
           <div className="chatbot-header">
             <div className="chatbot-header-logo">
               {/* Magento link for the image */}
-              <img src="media/wysiwyg/chatbot/OW-Logo-Long.png" alt="Assistant Logo" />
+              <img
+                src="media/wysiwyg/chatbot/OW-Logo-Long.png"
+                alt="Assistant Logo"
+              />
             </div>
             <button className="chatbot-close-btn" onClick={toggleChat}>
               <X size={20} />
@@ -87,7 +93,6 @@ export default function ChatbotWidget() {
 
           {/* Chatbot Messages */}
           <div className="chatbot-messages" ref={scrollableContainerRef}>
-
             <div className="chatbot-greeting">
               <span className="chatbot-hello">Hello 👋</span>
               <span className="chatbot-help">How can we help?</span>
@@ -169,7 +174,7 @@ export default function ChatbotWidget() {
               onClick={() => sendMessage(input)}
               className="chatbot-send-button"
             >
-              <MoveUp  className="send-icon" />
+              <MoveUp className="send-icon" />
             </button>
           </div>
         </div>
