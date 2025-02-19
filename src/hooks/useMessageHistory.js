@@ -7,19 +7,18 @@ export default function useMessageHistory(setShowPredefinedQuestions) {
       const parsedMessages = savedMessages ? JSON.parse(savedMessages) : null;
 
        // If messages exist but expired, clear them
-       if (parsedMessages.expiry && parsedMessages.expiry <= now) {
-        console.log("Messages expired, clearing...");
+       if (parsedMessages && parsedMessages.expiry && parsedMessages.expiry <= Date.now()) {
         localStorage.removeItem("chat_messages");
-        return [{ sender: "bot", text: "Hello! How can I help?" }];
+        return [];
       }
 
       // Check if the data has the correct structure
       return parsedMessages && parsedMessages.messages
         ? parsedMessages.messages
-        : [{ sender: "bot", text: "Hello! How can I help?" }];
+        : [];
     } catch (error) {
       console.error("Error parsing messages from localStorage:", error);
-      return [{ sender: "bot", text: "Hello! How can I help?" }];
+      return [];
     }
   });
 
@@ -76,7 +75,7 @@ export default function useMessageHistory(setShowPredefinedQuestions) {
 
     if (storedMessages && storedMessages.expiry <= now) {
       localStorage.removeItem("chat_messages");
-      setMessages([{ sender: "bot", text: "Hello! How can I help?" }]);
+      setMessages([]);
       setShowPredefinedQuestions(true);
     }
   }, []);
